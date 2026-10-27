@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Why We Need the 3090 VM</title>
-<meta name="description" content="Why the private AI engine needs one RTX 3090 GPU machine, with measured evidence and the monthly cost.">
+<meta name="description" content="One RTX 3090 GPU machine for two things, the Private AI engine and the Tavus API replacement, and what it costs.">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="referrer" content="no-referrer">
 <meta name="format-detection" content="telephone=no">
@@ -14,34 +14,31 @@
 <meta name="theme-color" content="#14171C" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Why We Need the 3090 VM">
-<meta property="og:description" content="Why the private AI engine needs one RTX 3090 GPU machine, with measured evidence and the monthly cost.">
+<meta property="og:description" content="One RTX 3090 GPU machine for two things, the Private AI engine and the Tavus API replacement, and what it costs.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231F3A5F'/%3E%3Crect x='12' y='34' width='10' height='18' fill='%23FAF9F7'/%3E%3Crect x='27' y='24' width='10' height='28' fill='%23FAF9F7'/%3E%3Crect x='42' y='12' width='10' height='40' fill='%23A03E1E'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap">
 <style>
-/* Layout: four short screens in a single column sized for a phone held in one hand.
-   Colours and type follow the existing CEO deck: navy for what our own engine does,
-   rust for money, Cambria and Calibri stand-ins (Caladea, Carlito) from Google Fonts.
+/* Layout: two short screens in a single column sized for a phone held in one hand.
+   Colours and type follow the existing CEO deck: navy for what is ours, rust for money,
+   Cambria and Calibri stand-ins (Caladea, Carlito) from Google Fonts.
    Flat fills, square corners, no shadows, no motion of any kind. */
 :root{
   color-scheme:light;
   --bg:#FAF9F7; --ink:#1A1A18; --muted:#5A5A55; --rule:#DDD9D2;
-  --navy:#1F3A5F; --navy-soft:#E9EDF3; --navy-tint:#C9D3E0;
-  --rust:#A03E1E; --rust-soft:#F3EAE4; --rust-tint:#E6D0C7;
+  --navy:#1F3A5F; --rust:#A03E1E;
   --display:"Caladea",Cambria,Georgia,"Times New Roman",serif;
   --body:"Carlito",Calibri,"Segoe UI",system-ui,-apple-system,sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#14171C; --ink:#ECEAE4; --muted:#A4A9B1; --rule:#2F343D;
-    --navy:#8DB0E0; --navy-soft:#1D2530; --navy-tint:#2B3C54;
-    --rust:#E8906D; --rust-soft:#2A211D; --rust-tint:#4B2F25;
+    --navy:#8DB0E0; --rust:#E8906D;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#14171C; --ink:#ECEAE4; --muted:#A4A9B1; --rule:#2F343D;
-  --navy:#8DB0E0; --navy-soft:#1D2530; --navy-tint:#2B3C54;
-  --rust:#E8906D; --rust-soft:#2A211D; --rust-tint:#4B2F25;
+  --navy:#8DB0E0; --rust:#E8906D;
   color-scheme:dark;
 }
 
@@ -65,41 +62,21 @@ h1{font-size:clamp(38px,11.5vw,54px); line-height:1.06; font-weight:700; letter-
 h2{font-size:clamp(28px,8.4vw,38px); line-height:1.14; font-weight:700}
 h3{font-size:22px; line-height:1.2; font-weight:700}
 
-/* First screen: the whole answer in two figures */
+/* First screen: the answer, one block for each use */
 .hero{padding:40px 0 36px}
-.glance{margin-top:32px}
-.glance>div{border-top:1px solid var(--rule); padding:22px 0 24px}
-.glance>div:last-child{border-bottom:1px solid var(--rule)}
-.fig{font:700 clamp(54px,16vw,72px)/1 var(--display); color:var(--navy)}
-.fig.money,.bigmoney{color:var(--rust)}
-.glance .fig+p{margin-top:10px; font-size:22px}
+.uses{margin-top:32px}
+.use{border-top:1px solid var(--rule); padding:22px 0 26px}
+.use:last-child{border-bottom:1px solid var(--rule)}
+.use h2{font:700 18px/1.2 var(--body); letter-spacing:.06em; text-transform:uppercase; color:var(--navy)}
+.job{margin-top:10px; font:700 clamp(34px,10vw,44px)/1.1 var(--display); text-wrap:balance}
+.job+p{margin-top:12px; font-size:22px}
 
-/* Every later screen */
+/* Second screen: the cost */
 .screen{border-top:3px solid var(--navy); padding:26px 0 48px}
-.count{margin-bottom:16px; font-size:16px; color:var(--muted); font-variant-numeric:tabular-nums}
+.bigmoney{margin-top:22px; font:700 clamp(40px,12.5vw,60px)/1 var(--display); color:var(--rust)}
+.bigmoney+p{margin-top:8px}
 .body{margin-top:16px}
 .note{margin-top:18px; font-size:17px; color:var(--muted)}
-.items{margin-top:22px}
-.item{border-top:1px solid var(--rule); padding:20px 0}
-.item:last-child{border-bottom:1px solid var(--rule)}
-.item p{margin-top:8px}
-
-/* Charts: bars drawn to one scale per chart, values written out beside each name */
-.chart{margin-top:26px; display:grid; gap:20px}
-.chart-title{font-size:17px; color:var(--muted)}
-.head{display:flex; justify-content:space-between; align-items:baseline; gap:14px}
-.name{min-width:0}
-.val{font-weight:700; font-size:22px; white-space:nowrap; font-variant-numeric:tabular-nums}
-.track{position:relative; height:28px; margin-top:8px; background:var(--navy-soft)}
-.track.plain{background:transparent; border-left:2px solid var(--ink)}
-.bar{display:block; height:100%; width:calc(var(--v) / var(--max) * 100%); background:var(--navy)}
-.rust .track{background:var(--rust-soft)}
-.rust .track.plain{background:transparent}
-.rust .bar{background:var(--rust)}
-.rust .bar.ref{background:var(--rust-tint); border:2px solid var(--rust)}
-
-.bigmoney{margin-top:22px; font:700 clamp(40px,12.5vw,60px)/1 var(--display)}
-.bigmoney+p{margin-top:8px}
 
 /* Sources stay folded away until asked for */
 details{margin-top:8px; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:16px 0}
@@ -115,72 +92,26 @@ summary{cursor:pointer; font:700 22px/1.2 var(--display)}
 <main class="page">
 
 <header class="hero">
-  <h1>Why we need one GPU machine</h1>
-  <div class="glance">
-    <div><p class="fig">4</p><p>jobs need a graphics card. The old VM has none.</p></div>
-    <div><p class="fig money">MYR&nbsp;1,433</p><p>a month for one RTX&nbsp;3090 machine. About MYR&nbsp;4,300 for 3&nbsp;months.</p></div>
+  <h1>We need one GPU machine for two things</h1>
+  <div class="uses">
+    <div class="use">
+      <h2>Private AI engine</h2>
+      <p class="job">Train the 14B models</p>
+      <p>The old VM has no graphics card.</p>
+    </div>
+    <div class="use">
+      <h2>Tavus API replacement</h2>
+      <p class="job">Run and test it</p>
+    </div>
   </div>
 </header>
 
-<section class="screen" id="jobs" aria-labelledby="h-jobs">
-  <p class="count">1 of 3</p>
-  <h2 id="h-jobs">What the engine needs a GPU for</h2>
-  <div class="items">
-    <div class="item">
-      <h3>Run the biggest model</h3>
-      <p>Our top tier, Ultra, runs on a graphics card.</p>
-    </div>
-    <div class="item">
-      <h3>Handle many requests at once</h3>
-      <p>Today they wait in line, as the next screen shows.</p>
-    </div>
-    <div class="item">
-      <h3>Retrain the models</h3>
-      <p>It needs a graphics card, so it is switched off today.</p>
-    </div>
-    <div class="item">
-      <h3>Score the 64 new adapters</h3>
-      <p>Trained on 28&nbsp;September, none scored against today's model yet.</p>
-    </div>
-  </div>
-</section>
-
-<section class="screen" id="wait" aria-labelledby="h-wait">
-  <p class="count">2 of 3</p>
-  <h2 id="h-wait">On the old VM, requests wait in line</h2>
-  <div class="chart" style="--max:210">
-    <p class="chart-title">Four long documents sent at the same time</p>
-    <div class="row">
-      <div class="head"><span class="name">First answer came back after</span><span class="val">43&nbsp;s</span></div>
-      <div class="track plain" aria-hidden="true"><span class="bar" style="--v:43"></span></div>
-    </div>
-    <div class="row">
-      <div class="head"><span class="name">Fourth answer came back after</span><span class="val">204.5&nbsp;s</span></div>
-      <div class="track plain" aria-hidden="true"><span class="bar" style="--v:204.5"></span></div>
-    </div>
-  </div>
-  <p class="body">The fourth answer came back almost five times later than the first. A graphics card can help. We have yet to measure it.</p>
-  <p class="note">Measured on the old VM.</p>
-</section>
-
 <section class="screen" id="cost" aria-labelledby="h-cost">
-  <p class="count">3 of 3</p>
   <h2 id="h-cost">What it costs</h2>
   <p class="bigmoney">MYR&nbsp;1,432.80</p>
-  <p>a month, about USD&nbsp;357, with a 200&nbsp;GB disk. Three months is about MYR&nbsp;4,300.</p>
-  <div class="chart rust" style="--max:25000">
-    <p class="chart-title">The same 24&nbsp;GB of card memory, rented or bought</p>
-    <div class="row">
-      <div class="head"><span class="name">This machine for 3&nbsp;months</span><span class="val">MYR&nbsp;4,300</span></div>
-      <div class="track plain" aria-hidden="true"><span class="bar" style="--v:4300"></span></div>
-    </div>
-    <div class="row">
-      <div class="head"><span class="name">A laptop with a 24&nbsp;GB card</span><span class="val">MYR&nbsp;25,000</span></div>
-      <div class="track plain" aria-hidden="true"><span class="bar ref" style="--v:25000"></span></div>
-    </div>
-  </div>
-  <p class="body">The laptop price equals about 17&nbsp;months of this machine. At IPServerOne, the 3090 is the cheapest card with 24&nbsp;GB.</p>
-  <p class="note">Read on 23 and 26&nbsp;October 2026. IPServerOne has not said whether tax is added.</p>
+  <p>a month, about USD&nbsp;357, for one RTX&nbsp;3090 machine with a 200&nbsp;GB disk. Three months is about MYR&nbsp;4,300.</p>
+  <p class="body">Both share this one machine. A machine for each would cost twice as much.</p>
+  <p class="note">Read on 23 and 26&nbsp;October 2026. IPServerOne has not said whether tax is added. This is a development machine; production hardware comes later.</p>
 </section>
 
 <details id="sources">
@@ -191,18 +122,10 @@ summary{cursor:pointer; font:700 22px/1.2 var(--display)}
       <li>NovaGPU plans, prices, dedicated card, no setup fee, read 26&nbsp;October 2026: <a href="https://www.ipserverone.com/novagpu/" rel="noopener noreferrer">ipserverone.com/novagpu</a></li>
       <li>Cost calculator for the 3090 with a 200&nbsp;GiB disk (MYR&nbsp;1.99 an hour, MYR&nbsp;1,432.80 a month, USD&nbsp;357.31), read 23&nbsp;October 2026: <a href="https://nova-calc.ipserverone.com/" rel="noopener noreferrer">nova-calc.ipserverone.com</a></li>
     </ul>
-    <h3>Laptop, read 26 October 2026</h3>
-    <ul>
-      <li>MSI Raider 18 HX AI with an RTX&nbsp;5090, 24&nbsp;GB (MYR&nbsp;25,599 and 26,499 listed): <a href="https://my-store.msi.com/products/msi-raider-18-hx-ai-a2xwjg-068-gaming-laptop" rel="noopener noreferrer">MSI Store Malaysia</a></li>
-      <li>The same laptop at MYR&nbsp;24,999: <a href="https://ncs.com.my/product/msi-raider-18-hx-ai-a2xwjg-068my/" rel="noopener noreferrer">NCS</a></li>
-      <li>Memory of the laptop card, RTX&nbsp;5090 24&nbsp;GB: <a href="https://www.notebookcheck.com/Nvidia-enthuellt-GeForce-RTX-5090-5080-und-5070-Laptop-GPUs-mit-bis-zu-10-496-CUDA-Kernen-und-24-GB-GDDR7.943054.0.html" rel="noopener noreferrer">Notebookcheck</a></li>
-    </ul>
     <h3>Our own records, not online</h3>
     <ul>
-      <li>Queue measurements on the old VM: our own concurrency test notes</li>
       <li>Old VM with no graphics card, retraining switched off: our own project state notes</li>
-      <li>Training run summary of 28&nbsp;September (64 adapters)</li>
-      <li>Ultra tier and its model, signed off on 21&nbsp;September: our own decisions sheet</li>
+      <li>One machine shared for development, production hardware later: our decision of 10&nbsp;October 2026</li>
     </ul>
   </div>
 </details>
