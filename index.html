@@ -18,26 +18,26 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231F3A5F'/%3E%3Crect x='12' y='34' width='10' height='18' fill='%23FAF9F7'/%3E%3Crect x='27' y='24' width='10' height='28' fill='%23FAF9F7'/%3E%3Crect x='42' y='12' width='10' height='40' fill='%23A03E1E'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap">
 <style>
-/* Layout: two short screens in a single column sized for a phone held in one hand.
-   Colours and type follow the existing CEO deck: navy for what is ours, rust for money,
-   Cambria and Calibri stand-ins (Caladea, Carlito) from Google Fonts.
+/* Layout: the answer, then one screen for each of the two uses, then the cost, in a single column
+   sized for a phone held in one hand. Colours and type follow the existing CEO deck: navy for what
+   is ours, rust for money, Cambria and Calibri stand-ins (Caladea, Carlito) from Google Fonts.
    Flat fills, square corners, no shadows, no motion of any kind. */
 :root{
   color-scheme:light;
-  --bg:#FAF9F7; --ink:#1A1A18; --muted:#5A5A55; --rule:#DDD9D2;
+  --bg:#FAF9F7; --ink:#1A1A18; --muted:#5A5A55; --rule:#DDD9D2; --tint:#E9EDF3;
   --navy:#1F3A5F; --rust:#A03E1E;
   --display:"Caladea",Cambria,Georgia,"Times New Roman",serif;
   --body:"Carlito",Calibri,"Segoe UI",system-ui,-apple-system,sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#14171C; --ink:#ECEAE4; --muted:#A4A9B1; --rule:#2F343D;
+    --bg:#14171C; --ink:#ECEAE4; --muted:#A4A9B1; --rule:#2F343D; --tint:#222A36;
     --navy:#8DB0E0; --rust:#E8906D;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#14171C; --ink:#ECEAE4; --muted:#A4A9B1; --rule:#2F343D;
+  --bg:#14171C; --ink:#ECEAE4; --muted:#A4A9B1; --rule:#2F343D; --tint:#222A36;
   --navy:#8DB0E0; --rust:#E8906D;
   color-scheme:dark;
 }
@@ -62,20 +62,41 @@ h1{font-size:clamp(38px,11.5vw,54px); line-height:1.06; font-weight:700; letter-
 h2{font-size:clamp(28px,8.4vw,38px); line-height:1.14; font-weight:700}
 h3{font-size:22px; line-height:1.2; font-weight:700}
 
+/* The two names are the page. They are set large in navy, numbered 1 and 2, on the first screen
+   and again at the top of each use's own screen, so the number ties the two together. */
+.head{display:grid; grid-template-columns:38px 1fr; column-gap:6px}
+.n,.name{font:700 clamp(32px,9.6vw,42px)/1.1 var(--display)}
+.n{color:var(--muted)}
+.name{margin:0; color:var(--navy); text-wrap:balance}
+
 /* First screen: the answer, one block for each use */
 .hero{padding:40px 0 36px}
 .uses{margin-top:32px}
 .use{border-top:1px solid var(--rule); padding:22px 0 26px}
 .use:last-child{border-bottom:1px solid var(--rule)}
-.use h2{font:700 18px/1.2 var(--body); letter-spacing:.06em; text-transform:uppercase; color:var(--navy)}
-.job{margin-top:10px; font:700 clamp(34px,10vw,44px)/1.1 var(--display); text-wrap:balance}
-.job+p{margin-top:12px; font-size:22px}
+.job{margin-top:10px; font-size:22px; line-height:1.3}
 
-/* Second screen: the cost */
-.screen{border-top:3px solid var(--navy); padding:26px 0 48px}
+/* One screen for each use, and one for the cost */
+.screen{border-top:3px solid var(--navy); padding:26px 0 44px}
+.screen>.head+.body{margin-top:18px}
+.body{margin-top:16px}
+
+/* Graphics memory against the card. The track is the whole 24 GB card, so each bar's width is its
+   figure divided by 24. A solid bar was measured; an outlined bar is an estimate, and each row
+   says which in words, so no key is needed. */
+.fit{margin-top:24px}
+.claim{font:700 clamp(24px,7vw,28px)/1.2 var(--display); text-wrap:balance}
+.row{margin-top:18px}
+.what{display:flex; flex-wrap:wrap; justify-content:space-between; column-gap:12px; font-size:19px; line-height:1.3}
+.what b{font-weight:700}
+.bar{margin-top:7px; height:22px; background:var(--tint)}
+.fill{display:block; height:100%; background:var(--navy)}
+.fill.est{background:transparent; border:3px solid var(--navy)}
+.scale{display:flex; justify-content:space-between; margin-top:7px; font-size:17px; color:var(--muted)}
+
+/* The cost */
 .bigmoney{margin-top:22px; font:700 clamp(40px,12.5vw,60px)/1 var(--display); color:var(--rust)}
 .bigmoney+p{margin-top:8px}
-.body{margin-top:16px}
 .note{margin-top:18px; font-size:17px; color:var(--muted)}
 
 /* Sources stay folded away until asked for */
@@ -94,17 +115,63 @@ summary{cursor:pointer; font:700 22px/1.2 var(--display)}
 <header class="hero">
   <h1>We need one GPU machine for two things</h1>
   <div class="uses">
-    <div class="use">
-      <h2>Private AI engine</h2>
-      <p class="job">Train the 14B models</p>
-      <p>The old VM has no graphics card.</p>
+    <div class="use head">
+      <span class="n" aria-hidden="true">1</span>
+      <div>
+        <p class="name">Private AI engine</p>
+        <p class="job">Train the 14B models</p>
+      </div>
     </div>
-    <div class="use">
-      <h2>Tavus API replacement</h2>
-      <p class="job">Run and test it</p>
+    <div class="use head">
+      <span class="n" aria-hidden="true">2</span>
+      <div>
+        <p class="name">Tavus API replacement</p>
+        <p class="job">Run and test it</p>
+      </div>
     </div>
   </div>
 </header>
+
+<section class="screen" id="engine" aria-labelledby="h-engine">
+  <div class="head">
+    <span class="n" aria-hidden="true">1</span>
+    <h2 class="name" id="h-engine">Private AI engine</h2>
+  </div>
+  <p class="body">The old VM has no graphics card, so training is switched off there.</p>
+  <div class="fit">
+    <p class="claim">Both fit on the 3090&rsquo;s 24&nbsp;GB card</p>
+    <div class="row">
+      <p class="what"><b>Run the biggest model</b><span>14.5&nbsp;GB, estimate</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill est" style="width:60.4%"></span></div>
+    </div>
+    <div class="row">
+      <p class="what"><b>Train the 14B models</b><span>17.5&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:72.9%"></span></div>
+    </div>
+    <p class="scale" aria-hidden="true"><span>0</span><span>24&nbsp;GB</span></p>
+  </div>
+</section>
+
+<section class="screen" id="tavus" aria-labelledby="h-tavus">
+  <div class="head">
+    <span class="n" aria-hidden="true">2</span>
+    <h2 class="name" id="h-tavus">Tavus API replacement</h2>
+  </div>
+  <p class="body">Mimic&rsquo;s AI video interviewer rents its talking face from Tavus today. We are replacing it with an open-source model that we run ourselves.</p>
+  <div class="fit">
+    <p class="claim">Both fit on the 3090&rsquo;s 24&nbsp;GB card</p>
+    <div class="row">
+      <p class="what"><b>Run a live interview</b><span>5.6&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:23.3%"></span></div>
+    </div>
+    <div class="row">
+      <p class="what"><b>Test the sharper version</b><span>10.8&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:45%"></span></div>
+    </div>
+    <p class="scale" aria-hidden="true"><span>0</span><span>24&nbsp;GB</span></p>
+  </div>
+  <p class="body">Our laptop&rsquo;s card is too slow for a live interview, so the interviewer waits an extra 2.5 to 5 seconds before each reply. We estimate the 3090 is fast enough.</p>
+</section>
 
 <section class="screen" id="cost" aria-labelledby="h-cost">
   <h2 id="h-cost">What it costs</h2>
@@ -125,6 +192,8 @@ summary{cursor:pointer; font:700 22px/1.2 var(--display)}
     <h3>Our own records, not online</h3>
     <ul>
       <li>Old VM with no graphics card, retraining switched off: our own project state notes</li>
+      <li>Graphics memory for the engine: our training run of 28&nbsp;September 2026 (measured) and a sum from the model file sizes (estimate)</li>
+      <li>Graphics memory of the Tavus replacement, and the laptop&rsquo;s delay: our own tests on 10, 11 and 14&nbsp;October 2026</li>
       <li>One machine shared for development, production hardware later: our decision of 10&nbsp;October 2026</li>
     </ul>
   </div>
