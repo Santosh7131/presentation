@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Why We Need the 3090 VM</title>
-<meta name="description" content="One RTX 3090 GPU machine for two things, the Private AI engine and the Tavus API replacement, and what it costs.">
+<meta name="description" content="One RTX 3090 GPU machine for two things, the Private AI engine and the Tavus API replacement.">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="referrer" content="no-referrer">
 <meta name="format-detection" content="telephone=no">
@@ -14,31 +14,31 @@
 <meta name="theme-color" content="#14171C" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Why We Need the 3090 VM">
-<meta property="og:description" content="One RTX 3090 GPU machine for two things, the Private AI engine and the Tavus API replacement, and what it costs.">
+<meta property="og:description" content="One RTX 3090 GPU machine for two things, the Private AI engine and the Tavus API replacement.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231F3A5F'/%3E%3Crect x='12' y='34' width='10' height='18' fill='%23FAF9F7'/%3E%3Crect x='27' y='24' width='10' height='28' fill='%23FAF9F7'/%3E%3Crect x='42' y='12' width='10' height='40' fill='%23A03E1E'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap">
 <style>
-/* Layout: the answer, then one screen for each of the two uses, then the cost, in a single column
-   sized for a phone held in one hand. Colours and type follow the existing CEO deck: navy for what
-   is ours, rust for money, Cambria and Calibri stand-ins (Caladea, Carlito) from Google Fonts.
-   Flat fills, square corners, no shadows, no motion of any kind. */
+/* Layout: the answer, then one screen for each of the two uses, in a single column sized for a phone
+   held in one hand. Colours and type follow the existing CEO deck: navy for what is ours, Cambria and
+   Calibri stand-ins (Caladea, Carlito) from Google Fonts. Flat fills, square corners, no shadows, no
+   motion of any kind. No figures and no costs on the page, on purpose. */
 :root{
   color-scheme:light;
   --bg:#FAF9F7; --ink:#1A1A18; --muted:#5A5A55; --rule:#DDD9D2; --tint:#E9EDF3;
-  --navy:#1F3A5F; --rust:#A03E1E;
+  --navy:#1F3A5F;
   --display:"Caladea",Cambria,Georgia,"Times New Roman",serif;
   --body:"Carlito",Calibri,"Segoe UI",system-ui,-apple-system,sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#14171C; --ink:#ECEAE4; --muted:#A4A9B1; --rule:#2F343D; --tint:#222A36;
-    --navy:#8DB0E0; --rust:#E8906D;
+    --navy:#8DB0E0;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#14171C; --ink:#ECEAE4; --muted:#A4A9B1; --rule:#2F343D; --tint:#222A36;
-  --navy:#8DB0E0; --rust:#E8906D;
+  --navy:#8DB0E0;
   color-scheme:dark;
 }
 
@@ -54,13 +54,10 @@ body{
 }
 .page{max-width:640px; margin:0 auto; padding:8px 4px 64px}
 p{margin:0}
-a{color:var(--navy); text-underline-offset:3px}
-a:focus-visible,summary:focus-visible{outline:3px solid var(--navy); outline-offset:3px}
 
-h1,h2,h3{margin:0; font-family:var(--display); text-wrap:balance}
+h1,h2{margin:0; font-family:var(--display); text-wrap:balance}
 h1{font-size:clamp(38px,11.5vw,54px); line-height:1.06; font-weight:700; letter-spacing:-.01em}
 h2{font-size:clamp(28px,8.4vw,38px); line-height:1.14; font-weight:700}
-h3{font-size:22px; line-height:1.2; font-weight:700}
 
 /* The two names are the page. They are set large in navy, numbered 1 and 2, on the first screen
    and again at the top of each use's own screen, so the number ties the two together. */
@@ -76,14 +73,14 @@ h3{font-size:22px; line-height:1.2; font-weight:700}
 .use:last-child{border-bottom:1px solid var(--rule)}
 .job{margin-top:10px; font-size:22px; line-height:1.3}
 
-/* One screen for each use, and one for the cost */
+/* One screen for each use */
 .screen{border-top:3px solid var(--navy); padding:26px 0 44px}
 .screen>.head+.body{margin-top:18px}
 .body{margin-top:16px}
 
-/* Graphics memory against the card. The track is the whole 24 GB card, so each bar's width is its
-   figure divided by 24. A solid bar was measured; an outlined bar is an estimate, and each row
-   says which in words, so no key is needed. */
+/* How much of the card each job uses. The track is the whole 3090 card, so each bar's width is its
+   share of it. A solid bar was measured; an outlined bar is an estimate, and each row says which in
+   words, so no key is needed. The bars carry no figures. */
 .fit{margin-top:24px}
 .claim{font:700 clamp(24px,7vw,28px)/1.2 var(--display); text-wrap:balance}
 .row{margin-top:18px}
@@ -92,20 +89,7 @@ h3{font-size:22px; line-height:1.2; font-weight:700}
 .bar{margin-top:7px; height:22px; background:var(--tint)}
 .fill{display:block; height:100%; background:var(--navy)}
 .fill.est{background:transparent; border:3px solid var(--navy)}
-.scale{display:flex; justify-content:space-between; margin-top:7px; font-size:17px; color:var(--muted)}
-
-/* The cost */
-.bigmoney{margin-top:22px; font:700 clamp(40px,12.5vw,60px)/1 var(--display); color:var(--rust)}
-.bigmoney+p{margin-top:8px}
-.note{margin-top:18px; font-size:17px; color:var(--muted)}
-
-/* Sources stay folded away until asked for */
-details{margin-top:8px; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:16px 0}
-summary{cursor:pointer; font:700 22px/1.2 var(--display)}
-.src{margin-top:12px; font-size:17px}
-.src h3{margin:22px 0 6px; font:700 17px/1.2 var(--body); letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
-.src ul{margin:0; padding-left:20px}
-.src li{margin:8px 0; overflow-wrap:anywhere}
+.cap{margin-top:12px; font-size:17px; color:var(--muted)}
 </style>
 </head>
 <body>
@@ -139,16 +123,16 @@ summary{cursor:pointer; font:700 22px/1.2 var(--display)}
   </div>
   <p class="body">The old VM has no graphics card, so training is switched off there.</p>
   <div class="fit">
-    <p class="claim">Both fit on the 3090&rsquo;s 24&nbsp;GB card</p>
+    <p class="claim">Both fit on the 3090&rsquo;s graphics card</p>
     <div class="row">
-      <p class="what"><b>Run the biggest model</b><span>14.5&nbsp;GB, estimate</span></p>
+      <p class="what"><b>Run the biggest model</b><span>estimate</span></p>
       <div class="bar" aria-hidden="true"><span class="fill est" style="width:60.4%"></span></div>
     </div>
     <div class="row">
-      <p class="what"><b>Train the 14B models</b><span>17.5&nbsp;GB, measured</span></p>
+      <p class="what"><b>Train the 14B models</b><span>measured</span></p>
       <div class="bar" aria-hidden="true"><span class="fill" style="width:72.9%"></span></div>
     </div>
-    <p class="scale" aria-hidden="true"><span>0</span><span>24&nbsp;GB</span></p>
+    <p class="cap">Each bar shows how much of the card it uses.</p>
   </div>
 </section>
 
@@ -159,45 +143,18 @@ summary{cursor:pointer; font:700 22px/1.2 var(--display)}
   </div>
   <p class="body">Mimic&rsquo;s AI video interviewer rents its talking face from Tavus today. We are replacing it with an open-source model that we run ourselves.</p>
   <div class="fit">
-    <p class="claim">Both fit on the 3090&rsquo;s 24&nbsp;GB card</p>
+    <p class="claim">Both fit on the 3090&rsquo;s graphics card</p>
     <div class="row">
-      <p class="what"><b>Run a live interview</b><span>5.6&nbsp;GB, measured</span></p>
+      <p class="what"><b>Run a live interview</b><span>measured</span></p>
       <div class="bar" aria-hidden="true"><span class="fill" style="width:23.3%"></span></div>
     </div>
     <div class="row">
-      <p class="what"><b>Test the sharper version</b><span>10.8&nbsp;GB, measured</span></p>
+      <p class="what"><b>Test the sharper version</b><span>measured</span></p>
       <div class="bar" aria-hidden="true"><span class="fill" style="width:45%"></span></div>
     </div>
-    <p class="scale" aria-hidden="true"><span>0</span><span>24&nbsp;GB</span></p>
+    <p class="cap">Each bar shows how much of the card it uses.</p>
   </div>
-  <p class="body">Our laptop&rsquo;s card is too slow for a live interview, so the interviewer waits an extra 2.5 to 5 seconds before each reply. We estimate the 3090 is fast enough.</p>
 </section>
-
-<section class="screen" id="cost" aria-labelledby="h-cost">
-  <h2 id="h-cost">What it costs</h2>
-  <p class="bigmoney">MYR&nbsp;1,432.80</p>
-  <p>a month, about USD&nbsp;357, for one RTX&nbsp;3090 machine with a 200&nbsp;GB disk. Three months is about MYR&nbsp;4,300.</p>
-  <p class="body">Both share this one machine. A machine for each would cost twice as much.</p>
-  <p class="note">Read on 23 and 26&nbsp;October 2026. IPServerOne has not said whether tax is added. This is a development machine; production hardware comes later.</p>
-</section>
-
-<details id="sources">
-  <summary>Where the numbers come from</summary>
-  <div class="src">
-    <h3>Machine and price</h3>
-    <ul>
-      <li>NovaGPU plans, prices, dedicated card, no setup fee, read 26&nbsp;October 2026: <a href="https://www.ipserverone.com/novagpu/" rel="noopener noreferrer">ipserverone.com/novagpu</a></li>
-      <li>Cost calculator for the 3090 with a 200&nbsp;GiB disk (MYR&nbsp;1.99 an hour, MYR&nbsp;1,432.80 a month, USD&nbsp;357.31), read 23&nbsp;October 2026: <a href="https://nova-calc.ipserverone.com/" rel="noopener noreferrer">nova-calc.ipserverone.com</a></li>
-    </ul>
-    <h3>Our own records, not online</h3>
-    <ul>
-      <li>Old VM with no graphics card, retraining switched off: our own project state notes</li>
-      <li>Graphics memory for the engine: our training run of 28&nbsp;September 2026 (measured) and a sum from the model file sizes (estimate)</li>
-      <li>Graphics memory of the Tavus replacement, and the laptop&rsquo;s delay: our own tests on 10, 11 and 14&nbsp;October 2026</li>
-      <li>One machine shared for development, production hardware later: our decision of 10&nbsp;October 2026</li>
-    </ul>
-  </div>
-</details>
 
 </main>
 
