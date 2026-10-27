@@ -104,10 +104,17 @@ p{margin:0}
 .cap{margin-top:12px; font-size:17px; line-height:1.4; color:var(--muted)}
 .cap+.cap{margin-top:8px}
 
+/* The block a view is really about is marked with a thick navy rule, a navy claim and taller bars. The
+   rest of the view stays quiet. */
+.fit.hl{border-top:3px solid var(--navy)}
+.hl .claim{color:var(--navy)}
+.hl .bar{height:30px; margin-top:8px}
+
 /* Speed is drawn on a track of 3 times live, with a line at 1 times live. A bar that stops short of the
-   line is too slow for a live interview. */
+   line is too slow for a live interview. The line has a halo in the page colour so it still shows where
+   a solid bar runs over it. */
 .live{position:relative}
-.live::after{content:""; position:absolute; left:33.333%; top:-5px; bottom:-5px; width:3px; background:var(--ink)}
+.live::after{content:""; position:absolute; left:33.333%; top:-5px; bottom:-5px; width:3px; margin-left:-3.5px; box-sizing:content-box; background:var(--ink); border-left:2px solid var(--bg); border-right:2px solid var(--bg)}
 .marks{position:relative; height:24px; margin-top:9px; font-size:17px; color:var(--muted)}
 .marks span{position:absolute; top:0; white-space:nowrap}
 .marks span:nth-child(1){left:0}
@@ -125,30 +132,34 @@ p{margin:0}
     <h1 class="name" id="h-engine">Private AI engine</h1>
   </div>
   <p class="body">The old VM has no graphics card, so training is switched off there.</p>
-  <div class="fit">
-    <p class="claim">Each one fits on the 3090&rsquo;s 24&nbsp;GB card</p>
+  <div class="fit hl">
+    <p class="claim">Training needs the most graphics memory</p>
     <div class="row">
-      <p class="what"><b>Run today&rsquo;s 4B model</b><span>7.9&nbsp;GB, measured</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill" style="width:32.9%"></span></div>
+      <p class="what"><b>Train the 14B models</b><span>17.5&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:72.9%"></span></div>
+    </div>
+    <div class="row">
+      <p class="what"><b>Train the 8B models</b><span>11.4&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:47.5%"></span></div>
+    </div>
+    <p class="body">The 3090 has 24&nbsp;GB, so both fit.</p>
+    <p class="cap">Each bar shows how much of the card it uses. Measured in our training run of 28&nbsp;September 2026.</p>
+  </div>
+  <div class="fit">
+    <p class="claim">Running the models needs less</p>
+    <div class="row">
+      <p class="what"><b>Run the 14B model</b><span>14.5&nbsp;GB, estimate</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill est" style="width:60.4%"></span></div>
     </div>
     <div class="row">
       <p class="what"><b>Run the 8B model</b><span>9.0&nbsp;GB, estimate</span></p>
       <div class="bar" aria-hidden="true"><span class="fill est" style="width:37.5%"></span></div>
     </div>
     <div class="row">
-      <p class="what"><b>Run the 14B model</b><span>14.5&nbsp;GB, estimate</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill est" style="width:60.4%"></span></div>
+      <p class="what"><b>Run today&rsquo;s 4B model</b><span>7.9&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:32.9%"></span></div>
     </div>
-    <div class="row">
-      <p class="what"><b>Train the 8B models</b><span>11.4&nbsp;GB, measured</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill" style="width:47.5%"></span></div>
-    </div>
-    <div class="row">
-      <p class="what"><b>Train the 14B models</b><span>17.5&nbsp;GB, measured</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill" style="width:72.9%"></span></div>
-    </div>
-    <p class="cap">Each bar shows how much of the card it uses.</p>
-    <p class="cap">Measured: the 4B engine on the old VM, and our training run of 28&nbsp;September 2026. Estimate: the model file, its adapters and one long conversation, added up.</p>
+    <p class="cap">Measured: the 4B engine on the old VM. Estimate: the model file, its adapters and one long conversation, added up.</p>
   </div>
   <div class="fit">
     <p class="claim">The card&rsquo;s memory is fast enough</p>
@@ -165,22 +176,10 @@ p{margin:0}
     <span class="n" aria-hidden="true">2</span>
     <h1 class="name" id="h-tavus">Tavus API replacement</h1>
   </div>
-  <p class="body">Mimic&rsquo;s AI video interviewer rents its talking face from Tavus today. We are replacing it with an open-source model that we run ourselves. Only the face uses the graphics card. The conversation runs on an outside service.</p>
-  <div class="fit">
-    <p class="claim">Both fit on the 3090&rsquo;s 24&nbsp;GB card</p>
-    <div class="row">
-      <p class="what"><b>Run a live interview</b><span>5.6&nbsp;GB, measured</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill" style="width:23.3%"></span></div>
-    </div>
-    <div class="row">
-      <p class="what"><b>Test the sharper version</b><span>10.8&nbsp;GB, measured</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill" style="width:45%"></span></div>
-    </div>
-    <p class="cap">Each bar shows how much of the card it uses. Measured on our test cards in October 2026.</p>
-    <p class="cap">The live version runs in real time today. The sharper version is closer to Tavus but runs at about a quarter of live speed on a test card, so we test it on recorded clips.</p>
-  </div>
-  <div class="fit">
-    <p class="claim">The card must draw the face faster than the video plays</p>
+  <p class="body">Mimic&rsquo;s AI video interviewer rents its talking face from Tavus today. We are replacing it with an open-source model that we run ourselves.</p>
+  <div class="fit hl">
+    <p class="claim">Computing power is the limit</p>
+    <p class="body">The graphics card does the calculating that draws the face. A live interview needs each picture drawn faster than the video plays.</p>
     <div class="row">
       <p class="what"><b>Our laptop&rsquo;s card</b><span>0.9&times; live, measured</span></p>
       <div class="bar live" aria-hidden="true"><span class="fill" style="width:30%"></span></div>
@@ -189,9 +188,19 @@ p{margin:0}
       <p class="what"><b>The 3090</b><span>about 1.9&times; live, estimate</span></p>
       <div class="bar live" aria-hidden="true"><span class="fill est" style="width:63.3%"></span></div>
     </div>
+    <div class="row">
+      <p class="what"><b>A faster test card</b><span>2.4&times; live, measured</span></p>
+      <div class="bar live" aria-hidden="true"><span class="fill" style="width:80%"></span></div>
+    </div>
     <p class="marks" aria-hidden="true"><span>0</span><span>1&times; live</span><span>3&times;</span></p>
+    <p class="cap">1&times; live means the face is drawn exactly as fast as the video plays. Measured in October 2026.</p>
     <p class="body">Our laptop&rsquo;s card is too slow, so the interviewer waits an extra 2.5 to 5 seconds before each reply.</p>
-    <p class="body">The 3090 figure is our estimate, from NVIDIA&rsquo;s ratings. It is enough for one live interview at a time.</p>
+    <p class="body">For live interviews, memory is not the problem. The whole server runs on our laptop&rsquo;s card, using 5.5&nbsp;GB.</p>
+    <p class="body">The 3090 figure is an estimate, scaled from the faster test card by NVIDIA&rsquo;s computing power ratings. It is enough for one live interview at a time.</p>
+  </div>
+  <div class="fit">
+    <p class="claim">The sharper version needs more computing still</p>
+    <p class="body">It is closer to Tavus, but on a test card it draws at about a quarter of live speed, so we test it on recorded clips.</p>
   </div>
   <nav class="nav" aria-label="Pages">
     <a class="btn" href="#home">Back to the start</a>
