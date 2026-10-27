@@ -18,10 +18,12 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231F3A5F'/%3E%3Crect x='12' y='34' width='10' height='18' fill='%23FAF9F7'/%3E%3Crect x='27' y='24' width='10' height='28' fill='%23FAF9F7'/%3E%3Crect x='42' y='12' width='10' height='40' fill='%23A03E1E'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap">
 <style>
-/* Layout: the answer, then one screen for each of the two uses, in a single column sized for a phone
-   held in one hand. Colours and type follow the existing CEO deck: navy for what is ours, Cambria and
-   Calibri stand-ins (Caladea, Carlito) from Google Fonts. Flat fills, square corners, no shadows, no
-   motion of any kind. No figures and no costs on the page, on purpose. */
+/* Layout: three views in one file, in a single column sized for a phone held in one hand. The first view
+   is the answer: the two names, with a button under each. A button opens that use's own view, where its
+   requirements are shown in depth. The views switch with :target, so there is no script, and each view has
+   its own link (#engine, #tavus) that can be sent on its own. Colours and type follow the existing CEO deck:
+   navy for what is ours, Cambria and Calibri stand-ins (Caladea, Carlito) from Google Fonts. Flat fills,
+   square corners, no shadows, no motion of any kind. No cost on the page, on purpose. */
 :root{
   color-scheme:light;
   --bg:#FAF9F7; --ink:#1A1A18; --muted:#5A5A55; --rule:#DDD9D2; --tint:#E9EDF3;
@@ -55,33 +57,43 @@ body{
 .page{max-width:640px; margin:0 auto; padding:8px 4px 64px}
 p{margin:0}
 
-h1,h2{margin:0; font-family:var(--display); text-wrap:balance}
-h1{font-size:clamp(38px,11.5vw,54px); line-height:1.06; font-weight:700; letter-spacing:-.01em}
-h2{font-size:clamp(28px,8.4vw,38px); line-height:1.14; font-weight:700}
-
-/* The two names are the page. They are set large in navy, numbered 1 and 2, on the first screen
-   and again at the top of each use's own screen, so the number ties the two together. */
+/* The two names are the page. They are set large in navy, numbered 1 and 2, on the first view and again
+   at the top of each use's own view, so the number ties the two together. */
 .head{display:grid; grid-template-columns:38px 1fr; column-gap:6px}
 .n,.name{font:700 clamp(32px,9.6vw,42px)/1.1 var(--display)}
 .n{color:var(--muted)}
 .name{margin:0; color:var(--navy); text-wrap:balance}
 
-/* First screen: the answer, one block for each use */
-.hero{padding:40px 0 36px}
+/* The views. Home comes last in the file so that a targeted view can hide it with a sibling selector: with
+   no hash nothing is targeted and home shows; with #engine or #tavus that view shows and home hides. */
+.view{display:none; padding:40px 0 48px}
+.view:target{display:block}
+.view:target ~ .home{display:none}
+.view>.head+.body{margin-top:18px}
+.body{margin-top:16px}
+
+/* First view: the answer, one block for each use */
+.home{padding:40px 0 36px}
+.home h1{margin:0; font:700 clamp(38px,11.5vw,54px)/1.06 var(--display); letter-spacing:-.01em; text-wrap:balance}
 .uses{margin-top:32px}
 .use{border-top:1px solid var(--rule); padding:22px 0 26px}
 .use:last-child{border-bottom:1px solid var(--rule)}
 .job{margin-top:10px; font-size:22px; line-height:1.3}
+.use .btn{margin-top:20px}
 
-/* One screen for each use */
-.screen{border-top:3px solid var(--navy); padding:26px 0 44px}
-.screen>.head+.body{margin-top:18px}
-.body{margin-top:16px}
+/* Buttons are links to another view. Solid goes forward, outlined goes back. */
+.btn{display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:56px; padding:12px 16px; border:3px solid var(--navy); background:transparent; color:var(--navy); font:700 20px/1.2 var(--body); text-decoration:none}
+.btn.solid{background:var(--navy); color:var(--bg)}
+.btn svg{flex:none; width:22px; height:22px}
+.btn:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+.nav{display:grid; gap:12px; margin-top:36px}
+.vh{position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
 
-/* How much of the card each job uses. The track is the whole 3090 card, so each bar's width is its
-   share of it. A solid bar was measured; an outlined bar is an estimate, and each row says which in
-   words, so no key is needed. The bars carry no figures. */
-.fit{margin-top:24px}
+/* How much of the card each job uses. The track is the whole 3090 card, so each bar's width is its share
+   of it. A solid bar was measured; an outlined bar is an estimate, and each row says which in words, so
+   no key is needed. */
+.fit{margin-top:30px; padding-top:26px; border-top:1px solid var(--rule)}
+.fit .body{margin-top:12px}
 .claim{font:700 clamp(24px,7vw,28px)/1.2 var(--display); text-wrap:balance}
 .row{margin-top:18px}
 .what{display:flex; flex-wrap:wrap; justify-content:space-between; column-gap:12px; font-size:19px; line-height:1.3}
@@ -89,14 +101,104 @@ h2{font-size:clamp(28px,8.4vw,38px); line-height:1.14; font-weight:700}
 .bar{margin-top:7px; height:22px; background:var(--tint)}
 .fill{display:block; height:100%; background:var(--navy)}
 .fill.est{background:transparent; border:3px solid var(--navy)}
-.cap{margin-top:12px; font-size:17px; color:var(--muted)}
+.cap{margin-top:12px; font-size:17px; line-height:1.4; color:var(--muted)}
+.cap+.cap{margin-top:8px}
+
+/* Speed is drawn on a track of 3 times live, with a line at 1 times live. A bar that stops short of the
+   line is too slow for a live interview. */
+.live{position:relative}
+.live::after{content:""; position:absolute; left:33.333%; top:-5px; bottom:-5px; width:3px; background:var(--ink)}
+.marks{position:relative; height:24px; margin-top:9px; font-size:17px; color:var(--muted)}
+.marks span{position:absolute; top:0; white-space:nowrap}
+.marks span:nth-child(1){left:0}
+.marks span:nth-child(2){left:33.333%; transform:translateX(-50%)}
+.marks span:nth-child(3){right:0}
 </style>
 </head>
 <body>
 
 <main class="page">
 
-<header class="hero">
+<section class="view" id="engine" aria-labelledby="h-engine">
+  <div class="head">
+    <span class="n" aria-hidden="true">1</span>
+    <h1 class="name" id="h-engine">Private AI engine</h1>
+  </div>
+  <p class="body">The old VM has no graphics card, so training is switched off there.</p>
+  <div class="fit">
+    <p class="claim">Each one fits on the 3090&rsquo;s 24&nbsp;GB card</p>
+    <div class="row">
+      <p class="what"><b>Run today&rsquo;s 4B model</b><span>7.9&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:32.9%"></span></div>
+    </div>
+    <div class="row">
+      <p class="what"><b>Run the 8B model</b><span>9.0&nbsp;GB, estimate</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill est" style="width:37.5%"></span></div>
+    </div>
+    <div class="row">
+      <p class="what"><b>Run the 14B model</b><span>14.5&nbsp;GB, estimate</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill est" style="width:60.4%"></span></div>
+    </div>
+    <div class="row">
+      <p class="what"><b>Train the 8B models</b><span>11.4&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:47.5%"></span></div>
+    </div>
+    <div class="row">
+      <p class="what"><b>Train the 14B models</b><span>17.5&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:72.9%"></span></div>
+    </div>
+    <p class="cap">Each bar shows how much of the card it uses.</p>
+    <p class="cap">Measured: the 4B engine on the old VM, and our training run of 28&nbsp;September 2026. Estimate: the model file, its adapters and one long conversation, added up.</p>
+  </div>
+  <div class="fit">
+    <p class="claim">The card&rsquo;s memory is fast enough</p>
+    <p class="body">The biggest model needs about 270&nbsp;GB/s. The 3090 has 936&nbsp;GB/s, 3.5 times that.</p>
+  </div>
+  <nav class="nav" aria-label="Pages">
+    <a class="btn solid" href="#tavus">Next: Tavus API replacement<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></a>
+    <a class="btn" href="#home">Back to the start</a>
+  </nav>
+</section>
+
+<section class="view" id="tavus" aria-labelledby="h-tavus">
+  <div class="head">
+    <span class="n" aria-hidden="true">2</span>
+    <h1 class="name" id="h-tavus">Tavus API replacement</h1>
+  </div>
+  <p class="body">Mimic&rsquo;s AI video interviewer rents its talking face from Tavus today. We are replacing it with an open-source model that we run ourselves. Only the face uses the graphics card. The conversation runs on an outside service.</p>
+  <div class="fit">
+    <p class="claim">Both fit on the 3090&rsquo;s 24&nbsp;GB card</p>
+    <div class="row">
+      <p class="what"><b>Run a live interview</b><span>5.6&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:23.3%"></span></div>
+    </div>
+    <div class="row">
+      <p class="what"><b>Test the sharper version</b><span>10.8&nbsp;GB, measured</span></p>
+      <div class="bar" aria-hidden="true"><span class="fill" style="width:45%"></span></div>
+    </div>
+    <p class="cap">Each bar shows how much of the card it uses. Measured on our test cards in October 2026.</p>
+    <p class="cap">The live version runs in real time today. The sharper version is closer to Tavus but runs at about a quarter of live speed on a test card, so we test it on recorded clips.</p>
+  </div>
+  <div class="fit">
+    <p class="claim">The card must draw the face faster than the video plays</p>
+    <div class="row">
+      <p class="what"><b>Our laptop&rsquo;s card</b><span>0.9&times; live, measured</span></p>
+      <div class="bar live" aria-hidden="true"><span class="fill" style="width:30%"></span></div>
+    </div>
+    <div class="row">
+      <p class="what"><b>The 3090</b><span>about 1.9&times; live, estimate</span></p>
+      <div class="bar live" aria-hidden="true"><span class="fill est" style="width:63.3%"></span></div>
+    </div>
+    <p class="marks" aria-hidden="true"><span>0</span><span>1&times; live</span><span>3&times;</span></p>
+    <p class="body">Our laptop&rsquo;s card is too slow, so the interviewer waits an extra 2.5 to 5 seconds before each reply.</p>
+    <p class="body">The 3090 figure is our estimate, from NVIDIA&rsquo;s ratings. It is enough for one live interview at a time.</p>
+  </div>
+  <nav class="nav" aria-label="Pages">
+    <a class="btn" href="#home">Back to the start</a>
+  </nav>
+</section>
+
+<header class="home" id="home">
   <h1>We need one GPU machine for two things</h1>
   <div class="uses">
     <div class="use head">
@@ -104,6 +206,7 @@ h2{font-size:clamp(28px,8.4vw,38px); line-height:1.14; font-weight:700}
       <div>
         <p class="name">Private AI engine</p>
         <p class="job">Train the 14B models</p>
+        <a class="btn solid" href="#engine">Show more<span class="vh"> about the Private AI engine</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></a>
       </div>
     </div>
     <div class="use head">
@@ -111,50 +214,11 @@ h2{font-size:clamp(28px,8.4vw,38px); line-height:1.14; font-weight:700}
       <div>
         <p class="name">Tavus API replacement</p>
         <p class="job">Run and test it</p>
+        <a class="btn solid" href="#tavus">Show more<span class="vh"> about the Tavus API replacement</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></a>
       </div>
     </div>
   </div>
 </header>
-
-<section class="screen" id="engine" aria-labelledby="h-engine">
-  <div class="head">
-    <span class="n" aria-hidden="true">1</span>
-    <h2 class="name" id="h-engine">Private AI engine</h2>
-  </div>
-  <p class="body">The old VM has no graphics card, so training is switched off there.</p>
-  <div class="fit">
-    <p class="claim">Both fit on the 3090&rsquo;s graphics card</p>
-    <div class="row">
-      <p class="what"><b>Run the biggest model</b><span>estimate</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill est" style="width:60.4%"></span></div>
-    </div>
-    <div class="row">
-      <p class="what"><b>Train the 14B models</b><span>measured</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill" style="width:72.9%"></span></div>
-    </div>
-    <p class="cap">Each bar shows how much of the card it uses.</p>
-  </div>
-</section>
-
-<section class="screen" id="tavus" aria-labelledby="h-tavus">
-  <div class="head">
-    <span class="n" aria-hidden="true">2</span>
-    <h2 class="name" id="h-tavus">Tavus API replacement</h2>
-  </div>
-  <p class="body">Mimic&rsquo;s AI video interviewer rents its talking face from Tavus today. We are replacing it with an open-source model that we run ourselves.</p>
-  <div class="fit">
-    <p class="claim">Both fit on the 3090&rsquo;s graphics card</p>
-    <div class="row">
-      <p class="what"><b>Run a live interview</b><span>measured</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill" style="width:23.3%"></span></div>
-    </div>
-    <div class="row">
-      <p class="what"><b>Test the sharper version</b><span>measured</span></p>
-      <div class="bar" aria-hidden="true"><span class="fill" style="width:45%"></span></div>
-    </div>
-    <p class="cap">Each bar shows how much of the card it uses.</p>
-  </div>
-</section>
 
 </main>
 
